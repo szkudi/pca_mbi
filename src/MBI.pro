@@ -35,32 +35,21 @@ SOURCES += main.cpp \
     micromatrix.cpp \
     controller.cpp \
     mainwindow.cpp \
-    settings.cpp
+    settings.cpp \
+    micromatrixpca.cpp
 
 HEADERS += \
     dataimport.h \
     micromatrix.h \
     controller.h \
     mainwindow.h \
-    settings.h
+    settings.h \
+    micromatrixpca.h
 
 FORMS += \
     mainwindow.ui
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+unix {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += opencv
+}
