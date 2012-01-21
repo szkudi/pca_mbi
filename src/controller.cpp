@@ -17,19 +17,18 @@ void Controller::init(){
 
 void Controller::openFile(QStringList filenames){
     DataImport di(filenames.size());
-    bool success;
     QString errorIn;
     foreach(QString filename, filenames){
         qDebug() << "Read file: " << filename.toLocal8Bit().constData();
         QFile file(filename);
-        bool success = di.parseData(file);
+        Mat pcaInputData = di.parseData(file);
+        bool success = pcaInputData.rows > 0;
         if(!success){
             errorIn = filename;
             qDebug() << "Error in: " << errorIn;
             break;
         }
+        qDebug() << "Import status: " << success;
     }
-    Mat pcaInputData = di.fetch();
-    qDebug() << "Import status: " << success;
 
 }

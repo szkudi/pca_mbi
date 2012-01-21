@@ -12,16 +12,15 @@ using namespace cv;
 class DataImport
 {
 public:
-    DataImport(int filesCount);
-    bool parseData(QIODevice& device);
-    Mat fetch();
+    DataImport(int startAtLine, int firstColumn, int lastColumn);
+    Mat parseData(QIODevice& device);
 private:
-    QRegExp* headersPattern;
+    //QRegExp* headersPattern;
     QRegExp* dataPattern;
 
-    int rowCount;
-    int currentRow;
-    Mat data;
+    int startAtLine;
+    int firstColumn;
+    int lastColumn;
 };
 
 #endif // DATAIMPORT_H

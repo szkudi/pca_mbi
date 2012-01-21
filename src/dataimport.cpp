@@ -6,78 +6,70 @@
 
 const int columnOfIntrests = 3;
 
-DataImport::DataImport(int filecount)
+DataImport::DataImport(int startAtLine, int firstColumn, int lastColumn)
 {
-    this->headersPattern = new QRegExp("!([^=]+)=(.*)");
+    //this->headersPattern = new QRegExp("!([^=]+)=(.*)");
     this->dataPattern  = new QRegExp("([^\t]*)[\t]");
-    this->rowCount = filecount;
-    this->currentRow = -1;
+
+    this->startAtLine = startAtLine;
+    this->firstColumn = firstColumn;
+    this->lastColumn = lastColumn;
 }
 
-enum FilePart{
-    HEADERS,
-    COLUMNS,
-    DATA
-};
-
-bool DataImport::parseData(QIODevice& device){
+Mat DataImport::parseData(QIODevice& device){
     std::cout << "Start import..." << std::endl;
-    this->currentRow ++;
     int currentCol = 0;
+    int currentLine = -1;
+    int currentRow = 0;
+    int lineCount = 0;
     if (!device.open(QIODevice::ReadOnly)){
         std::cout << "Cannot open" << std::endl;
-        return false;
+        return Mat();
     }
     char buf[4096];
-    FilePart current = HEADERS;
+
+    while(device.readLine(buf, sizeof(buf)) != 1){
+        lineCount++;
+    }
+    device.seek(0);
+    Mat output;
     try{
         while(true){
             qint64 lineLength = device.readLine(buf, sizeof(buf));
             if (lineLength != -1) {
-                if(this->headersPattern->exactMatch(buf)){
-                    //QStringList groups = this->headersPattern->capturedTexts();
-                    //result->addHeader(groups.at(1), groups.at(2));
-
-                }else {
-                    if(current == HEADERS){
-                        current = COLUMNS;
-                    }else if(current == COLUMNS){
-                        current = DATA;
-                    }
-                    int pos = 0;
-
-                    QVector<QString> columnValues;
-                    while ((pos = this->dataPattern->indexIn(buf, pos)) != -1) {
-                        pos += this->dataPattern->matchedLength();
-                        columnValues << this->dataPattern->cap(1);
-                    }
-
-                    if(this->data.rows == 0){
-                        //create output matrix
-                        this->data = Mat(this->rowCount, columnValues.size(), CV_32F);
-                    }
-
-                    if(current == COLUMNS){
-                        //ignore
-                    }else{
-                        //result->setColumnValues(columnValues);
-                        assert(columnValues.size() < columnOfIntrests);
-                        QString strValue = columnValues[columnOfIntrests];
-                        float value = strValue.toFloat();
-                        this->data.at<float>(this->currentRow, currentCol) = value;
-                        currentCol++;
-                    }
+                currentLine ++;
+                if(currentLine < this->startAtLine){
+                    //ignore first lines
+                    continue;
                 }
+
+                int pos = 0;
+
+                QVector<QString> columnValues;
+                while ((pos = this->dataPattern->indexIn(buf, pos)) != -1) {
+                    pos += this->dataPattern->matchedLength();
+                    columnValues << this->dataPattern->cap(1);
+                }
+
+                if(output.rows == 0){
+                    //create output matrix
+                    int rowCount = lineCount - startAtLine;
+                    output = Mat(rowCount, columnValues.size(), CV_32F);
+                }
+
+                assert(columnValues.size() < columnOfIntrests);
+                QString strValue = columnValues[columnOfIntrests];
+                float value = strValue.toFloat();
+                output.at<float>(currentRow, currentCol) = value;
+                currentCol++;
+
+
             }else{
                 break;
             }
         }
-        return true;
+        return output;
     }catch(...){
-        return false;
+        return Mat();
     }
-}
-
-Mat DataImport::fetch(){
-    return data;
 }
