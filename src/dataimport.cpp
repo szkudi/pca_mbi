@@ -58,8 +58,9 @@ Mat DataImport::parseData(QIODevice& device){
                 if(output.rows == 0){
                     //create output matrix
                     int rowCount = lineCount - startAtLine;
+                    int colCount = lastColumn - firstColumn + 1;
                     columnsInFirstRow = columnValues.size();
-                    output = Mat(rowCount, columnValues.size(), CV_32F);
+                    output = Mat(rowCount, colCount, CV_32F);
                 }else{
                     if(columnsInFirstRow != columnValues.size()){
                         throw BadFile(QString("Bad column count in line"), currentLine);
