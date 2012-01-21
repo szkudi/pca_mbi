@@ -10,9 +10,9 @@ class BadFile: public exception
 public:
     BadFile(QString msg, int line);
     virtual const char* what() const throw();
-
+    virtual ~BadFile() throw();
 private:
-    QString str;
+    QString msg;
     int line;
 };
 
