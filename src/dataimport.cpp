@@ -54,7 +54,7 @@ bool DataImport::parseData(QIODevice& device){
 
                     if(this->data.rows == 0){
                         //create output matrix
-                        this->data = Mat(this->rowCount, columnValues.size(), 0);
+                        this->data = Mat(this->rowCount, columnValues.size(), CV_32F);
                     }
 
                     if(current == COLUMNS){
@@ -63,8 +63,8 @@ bool DataImport::parseData(QIODevice& device){
                         //result->setColumnValues(columnValues);
                         assert(columnValues.size() < columnOfIntrests);
                         QString strValue = columnValues[columnOfIntrests];
-                        int value = strValue.toInt();
-                        this->data.at<int>(this->currentRow, currentCol) = value;
+                        float value = strValue.toFloat();
+                        this->data.at<float>(this->currentRow, currentCol) = value;
                         currentCol++;
                     }
                 }
