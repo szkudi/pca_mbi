@@ -4,8 +4,6 @@
 #include <QDebug>
 #include <iostream>
 
-const int columnOfIntrests = 3;
-
 DataImport::DataImport(int startAtLine, int firstColumn, int lastColumn)
 {
     //this->headersPattern = new QRegExp("!([^=]+)=(.*)");
@@ -28,9 +26,11 @@ Mat DataImport::parseData(QIODevice& device){
     }
     char buf[4096];
 
-    while(device.readLine(buf, sizeof(buf)) != 1){
+    std::cout << "Counting file lines" << std::endl;
+    while(device.readLine(buf, sizeof(buf)) != -1){
         lineCount++;
     }
+    std::cout << "File lines " << lineCount << std::endl;
     device.seek(0);
     Mat output;
     try{
@@ -51,19 +51,21 @@ Mat DataImport::parseData(QIODevice& device){
                     columnValues << this->dataPattern->cap(1);
                 }
 
+                std::cout << "Line " << currentLine << std::endl;
+
                 if(output.rows == 0){
                     //create output matrix
                     int rowCount = lineCount - startAtLine;
                     output = Mat(rowCount, columnValues.size(), CV_32F);
                 }
-
-                assert(columnValues.size() < columnOfIntrests);
-                QString strValue = columnValues[columnOfIntrests];
-                float value = strValue.toFloat();
-                output.at<float>(currentRow, currentCol) = value;
-                currentCol++;
-
-
+                currentCol = 0;
+                for(int x=this->firstColumn ; x <= lastColumn ; x++){
+                    QString strValue = columnValues[x];
+                    float value = strValue.toFloat();
+                    output.at<float>(currentRow, currentCol) = value;
+                    currentCol++;
+                }
+                currentRow ++;
             }else{
                 break;
             }

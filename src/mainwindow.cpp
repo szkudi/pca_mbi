@@ -19,7 +19,7 @@ MainWindow::~MainWindow()
 void MainWindow::showOpenFileDialog(){
     QFileDialog dialog(this);
     dialog.setFileMode(QFileDialog::ExistingFiles);
-    dialog.setNameFilter(tr("Micro Matrix (*.xls *.xls.gz)"));
+    dialog.setNameFilter(tr("Micro Matrix (*.txt)"));
     dialog.setViewMode(QFileDialog::Detail);
     dialog.setDirectory(Settings::getInstance().lastDir());
     QStringList fileNames;
