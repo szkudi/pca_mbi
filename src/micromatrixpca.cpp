@@ -1,41 +1,45 @@
 #include "micromatrixpca.h"
+#include <QDebug>
 
-MicroMatrixPCA::MicroMatrixPCA(Mat& mat): originalData(mat), projectedData(null)
+MicroMatrixPCA::MicroMatrixPCA(Mat& mat): originalData(mat), projectedData(NULL)
 {
-    pca=PCA(originalData,Mat(),CV_PCA_DATA_AS_ROW,0);
+    pca=PCA(originalData,Mat(),CV_PCA_DATA_AS_COL,0);
 }
 
 MicroMatrixPCA::~MicroMatrixPCA()
 {
-    if(projectedData!=null)
+    if(projectedData!=NULL)
         delete projectedData;
 }
 
 Mat MicroMatrixPCA::projectAll()
 {
-    if(projectedData==null)
+    if(projectedData==NULL)
     {
         projectedData=new Mat(originalData.rows,originalData.cols,CV_32FC1);
-        for(int i=0;i<originalData.rows;i++)
-            pca.project(originalData.row(i),projectedData.row(i));
+        for(int i=0;i<originalData.cols;i++)
+        {
+            Mat row=projectedData->col(i);
+            pca.project(originalData.col(i),row);
+        }
     }
     return *projectedData;
 }
 
-Mat MicroMatrixPCA::backProjectAll(int columns)
+Mat MicroMatrixPCA::backProjectAll(int size)
 {
-    if(columns>originalData.cols)
-        columns=originalData.cols;
-    if(columns<1)
-        columns=1;
-    if(projectedData==null)
+    if(size>projectedData->rows)
+        size=projectedData->rows;
+    if(size<1)
+        size=1;
+    if(projectedData==NULL)
         projectAll();
     Mat result(originalData.rows,originalData.cols,CV_32FC1);
-    for(int i=0;i<projectedData->rows;i++)
+    for(int i=0;i<projectedData->cols;i++)
     {
-        Mat row(1,projectedData->cols,CV_32FC1);
-        projectedData->row(i).colRange(0,columns-1).copyTo(row);
-        pca.backProject(row,result.row(i));
+        Mat col(size,1,CV_32FC1);
+        projectedData->col(i).copyTo(col);
+        result.col(i)=pca.backProject(col);
     }
     return result;
 }

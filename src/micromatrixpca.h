@@ -14,6 +14,7 @@ private:
 
 public:
     MicroMatrixPCA(Mat& mat);
+    ~MicroMatrixPCA();
     Mat projectAll();
     Mat backProjectAll(int columns);
 };
