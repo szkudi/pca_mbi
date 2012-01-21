@@ -4,10 +4,14 @@
 #include <QDebug>
 #include <iostream>
 
-DataImport::DataImport()
+const int columnOfIntrests = 3;
+
+DataImport::DataImport(int filecount)
 {
     this->headersPattern = new QRegExp("!([^=]+)=(.*)");
     this->dataPattern  = new QRegExp("([^\t]*)[\t]");
+    this->rowCount = filecount;
+    this->currentRow = -1;
 }
 
 enum FilePart{
@@ -16,22 +20,23 @@ enum FilePart{
     DATA
 };
 
-QSharedPointer<MicroMatrix> DataImport::parseData(QIODevice& device){
+bool DataImport::parseData(QIODevice& device){
     std::cout << "Start import..." << std::endl;
+    this->currentRow ++;
+    int currentCol = 0;
     if (!device.open(QIODevice::ReadOnly)){
         std::cout << "Cannot open" << std::endl;
-        return QSharedPointer<MicroMatrix>(NULL);
+        return false;
     }
     char buf[4096];
-    MicroMatrix* result = new MicroMatrix();
     FilePart current = HEADERS;
     try{
         while(true){
             qint64 lineLength = device.readLine(buf, sizeof(buf));
             if (lineLength != -1) {
                 if(this->headersPattern->exactMatch(buf)){
-                    QStringList groups = this->headersPattern->capturedTexts();
-                    result->addHeader(groups.at(1), groups.at(2));
+                    //QStringList groups = this->headersPattern->capturedTexts();
+                    //result->addHeader(groups.at(1), groups.at(2));
 
                 }else {
                     if(current == HEADERS){
@@ -41,25 +46,38 @@ QSharedPointer<MicroMatrix> DataImport::parseData(QIODevice& device){
                     }
                     int pos = 0;
 
-                    QLinkedList<QString> columnValues;
+                    QVector<QString> columnValues;
                     while ((pos = this->dataPattern->indexIn(buf, pos)) != -1) {
                         pos += this->dataPattern->matchedLength();
                         columnValues << this->dataPattern->cap(1);
                     }
 
+                    if(this->data.rows == 0){
+                        //create output matrix
+                        this->data = Mat(this->rowCount, columnValues.size(), CV_32F);
+                    }
+
                     if(current == COLUMNS){
-                        result->setColumnNames(columnValues);
+                        //ignore
                     }else{
-                        result->setColumnValues(columnValues);
+                        //result->setColumnValues(columnValues);
+                        assert(columnValues.size() < columnOfIntrests);
+                        QString strValue = columnValues[columnOfIntrests];
+                        float value = strValue.toFloat();
+                        this->data.at<float>(this->currentRow, currentCol) = value;
+                        currentCol++;
                     }
                 }
             }else{
                 break;
             }
         }
-        return QSharedPointer<MicroMatrix>(result);
+        return true;
     }catch(...){
-        delete result;
-        return QSharedPointer<MicroMatrix>(NULL);
+        return false;
     }
+}
+
+Mat DataImport::fetch(){
+    return data;
 }
