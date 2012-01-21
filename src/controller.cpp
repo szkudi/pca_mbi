@@ -4,6 +4,7 @@
 #include "mainwindow.h"
 #include "dataimport.h"
 #include "parameters.h"
+#include "micromatrixpca.h"
 
 Controller::Controller(MainWindow *parent) :
     QObject(parent)
@@ -34,8 +35,11 @@ void Controller::openFile(QStringList filenames){
                 errorIn = filename;
                 qDebug() << "Error in: " << errorIn;
                 break;
-            }
+            }        
             qDebug() << "Import status: " << success;
+            MicroMatrixPCA pca(pcaInputData);
+            pca.projectAll();
+            pca.backProjectAll(10);
         }
     }
 }
