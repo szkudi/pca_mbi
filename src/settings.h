@@ -4,14 +4,19 @@
 #include <QObject>
 #include <QSettings>
 #include <QString>
+#include <QStringList>
 
 class Settings
 {
 public:
     static Settings& getInstance();
+    virtual ~Settings();
 
     QString lastDir();
     void setLastDir(QString dir);
+    QStringList lastImportedFiles();
+    void setLastImportedFiles(QStringList filesNames);
+
     int startingRow();
     void setStartingRow(int val);
     int startingColumn();
@@ -19,7 +24,7 @@ public:
     int endingColumn();
     void setEndingColumn(int val);
 private:
-    explicit Settings(QObject *parent = 0);
+    explicit Settings();
 
     QSettings settings;
     static Settings instance;

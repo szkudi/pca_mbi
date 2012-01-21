@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QString>
+#include <QSignalMapper>
 
 namespace Ui {
     class MainWindow;
@@ -17,13 +18,18 @@ public:
     ~MainWindow();
 
 signals:
-    void openFile(QStringList filenames);
+    void openFile(QString filename);
+
+public slots:
+    void updateRecentlyOpenFiles(QStringList filesNames);
 
 private slots:
     void showOpenFileDialog();
+    void showAboutWindow();
 
 private:
     Ui::MainWindow *ui;
+    QSignalMapper *signalMapper;
 };
 
 #endif // MAINWINDOW_H

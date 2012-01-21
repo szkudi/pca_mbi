@@ -11,23 +11,16 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Błąd redukcji liczby wymiarów</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Error per features count:</string>
-     </property>
-    </widget>
-   </item>
    <item>
     <widget class="QTableWidget" name="tableWidget"/>
    </item>
    <item>
     <widget class="QPushButton" name="pushButton">
      <property name="text">
-      <string>Close</string>
+      <string>Zamknij</string>
      </property>
     </widget>
    </item>

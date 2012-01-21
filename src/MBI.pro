@@ -32,30 +32,31 @@ symbian:TARGET.CAPABILITY += NetworkServices
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     dataimport.cpp \
-    micromatrix.cpp \
     controller.cpp \
     mainwindow.cpp \
     settings.cpp \
     micromatrixpca.cpp \
     parameters.cpp \
     badfile.cpp \
-    pcaresultwindow.cpp
+    pcaresultwindow.cpp \
+    aboutwindow.cpp
 
 HEADERS += \
     dataimport.h \
-    micromatrix.h \
     controller.h \
     mainwindow.h \
     settings.h \
     micromatrixpca.h \
     parameters.h \
     badfile.h \
-    pcaresultwindow.h
+    pcaresultwindow.h \
+    aboutwindow.h
 
 FORMS += \
     mainwindow.ui \
     parameters.ui \
-    pcaresultwindow.ui
+    pcaresultwindow.ui \
+    aboutwindow.ui
 
 unix {
     CONFIG += link_pkgconfig

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MBI</string>
+   <string>MBI - PCA</string>
   </property>
   <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">
@@ -20,14 +20,20 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>20</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>Plik</string>
     </property>
+    <widget class="QMenu" name="menuRecentlyOpen">
+     <property name="title">
+      <string>Ostatnio otwarte</string>
+     </property>
+    </widget>
     <addaction name="actionReadFile"/>
+    <addaction name="menuRecentlyOpen"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -57,6 +63,11 @@
   <action name="actionAbout">
    <property name="text">
     <string>O autorach...</string>
+   </property>
+  </action>
+  <action name="actionAsdas">
+   <property name="text">
+    <string>asdas</string>
    </property>
   </action>
  </widget>

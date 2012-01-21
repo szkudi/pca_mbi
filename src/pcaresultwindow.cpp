@@ -9,8 +9,8 @@ PCAResultWindow::PCAResultWindow(QWidget *parent, QMap<int, float> pcaErrorPerFe
     ui->tableWidget->setRowCount(pcaErrorPerFeatures.count());
     ui->tableWidget->setColumnCount(2);
     QStringList headers;
-    headers << "Features count";
-    headers << "Error";
+    headers << trUtf8("Ilość cech");
+    headers << trUtf8("Błąd");
     ui->tableWidget->setHorizontalHeaderLabels(headers);
     QList<int> keys = pcaErrorPerFeatures.keys();
     int rowCounter = 0;

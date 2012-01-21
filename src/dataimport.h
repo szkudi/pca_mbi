@@ -1,7 +1,6 @@
 #ifndef DATAIMPORT_H
 #define DATAIMPORT_H
 
-#include "micromatrix.h"
 #include <QIODevice>
 #include <QRegExp>
 #include <QSharedPointer>

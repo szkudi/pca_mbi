@@ -13,14 +13,16 @@ public:
     explicit Controller(MainWindow* parent );
     void init();
 
-signals:
-
-public slots:
-
 private slots:
-    void openFile(QStringList filename);
+    void openFile(QString filename);
     void saveMat(char* filename, cv::Mat mat);
+
+signals:
+    void recentlyImportedFilesChanged(QStringList listOfFilesNames);
+
 private:
+    void addFileToRecentlyOpen(QString fileName);
+
     MainWindow *view;
 };
 
