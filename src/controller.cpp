@@ -44,12 +44,9 @@ void Controller::openFile(QStringList filenames){
             MicroMatrixPCA pca(pcaInputData);
             Mat pca_pro = pca.projectAll();
             saveMat("pca.txt", pca_pro);
-            Mat pca_backpro = pca.backProjectAll(10);
+            Mat pca_backpro = pca.backProjectAll(100);
             saveMat("pca_back.txt", pca_backpro);
-            QMap<int, float> map;
-            map[1] = 0.01;
-            map[3] = 0.02;
-            map[4] = 0.03;
+            QMap<int, float> map=pca.calculateErrors();
             PCAResultWindow *errorWindow = new PCAResultWindow(NULL, map);
             errorWindow->show();
         }

@@ -75,35 +75,35 @@ int main(int argc, char *argv[])
     double z_chng = (double)(end.z - start.z)/measures_cnt;
 //    std::cout << z_chng << std::endl;
 
-//    for(int i = 0; i < cameras_num; ++i){
-//        for(int j = 0; j < measures_cnt; ++j){
-//            if(j != 0)
-//                output << "\t";
-//            output << (double)start.x + j * x_chng - (double)cameras[i].x;
-//        }
-//        output << "\t" << std::endl;
-//        for(int j = 0; j < measures_cnt; ++j){
-//            if(j != 0)
-//                output << "\t";
-//            output << (double)start.y + j * y_chng - (double)cameras[i].y;
-//        }
-//        output << "\t" << std::endl;
-
-//        for(int j = 0; j < measures_cnt; ++j){
-//            if(j != 0)
-//                output << "\t";
-//            output << (double)start.z + j * z_chng;
-//        }
-//        output << "\t" << std::endl;
-
-//    }
-
-    for(int i = 0; i < measures_cnt; ++i){
-        for(int j = 0; j < cameras_num; ++j){
-            output << (double)start.x + i * x_chng - (double)cameras[j].x << "\t" << (double)start.y + i * y_chng - (double)cameras[j].y << "\t" << (double)start.z + i * z_chng << "\t";
+    for(int i = 0; i < cameras_num; ++i){
+        for(int j = 0; j < measures_cnt; ++j){
+            if(j != 0)
+                output << "\t";
+            output << (double)start.x + j * x_chng - (double)cameras[i].x;
         }
-        output << std::endl;
+        output << "\t" << std::endl;
+        for(int j = 0; j < measures_cnt; ++j){
+            if(j != 0)
+                output << "\t";
+            output << (double)start.y + j * y_chng - (double)cameras[i].y;
+        }
+        output << "\t" << std::endl;
+
+        for(int j = 0; j < measures_cnt; ++j){
+            if(j != 0)
+                output << "\t";
+            output << (double)start.z + j * z_chng;
+        }
+        output << "\t" << std::endl;
+
     }
+
+//    for(int i = 0; i < measures_cnt; ++i){
+//      for(int j = 0; j < cameras_num; ++j){
+//            output << (double)start.x + i * x_chng - (double)cameras[j].x << "\t" << (double)start.y + i * y_chng - (double)cameras[j].y << "\t" << (double)start.z + i * z_chng << "\t";
+//        }
+//        output << std::endl;
+//    }
 
    output.close();
 
