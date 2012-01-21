@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QWidget>
 #include "mainwindow.h"
+#include "importeddatamodel.h"
 #include "cv.h"
 
 class Controller : public QObject
@@ -15,7 +16,7 @@ public:
 
 private slots:
     void openFile(QString filename);
-    void saveMat(char* filename, cv::Mat mat);
+    void saveMat(const char* filename, cv::Mat mat);
 
 signals:
     void recentlyImportedFilesChanged(QStringList listOfFilesNames);
@@ -24,6 +25,7 @@ private:
     void addFileToRecentlyOpen(QString fileName);
 
     MainWindow *view;
+    ImportedDataModel *importedDataModel;
 };
 
 #endif // CONTROLLER_H

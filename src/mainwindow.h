@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QString>
 #include <QSignalMapper>
+#include <QAbstractTableModel>
 
 namespace Ui {
     class MainWindow;
@@ -15,6 +16,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    void setHistoryModel(QAbstractTableModel *model);
     ~MainWindow();
 
 signals:

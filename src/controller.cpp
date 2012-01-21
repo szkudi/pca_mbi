@@ -17,6 +17,8 @@ Controller::Controller(MainWindow *parent) :
     QObject(parent)
 {
     view = parent;
+    importedDataModel = new ImportedDataModel(this);
+    view->setHistoryModel(importedDataModel);
 }
 
 void Controller::init(){
@@ -29,6 +31,7 @@ void Controller::init(){
 
 void Controller::openFile(QString filename){
     Parameters params;
+    qDebug() << "Open parameters window";
     if(params.exec()==true)
     {
         qDebug() << "Starting row:" << params.getStartingRow();
@@ -53,32 +56,24 @@ void Controller::openFile(QString filename){
         QMap<int, float> map=pca.calculateErrors();
         PCAResultWindow *errorWindow = new PCAResultWindow(NULL, map);
         errorWindow->show();
-
+        this->importedDataModel->addImportedFile(filename, pcaInputData.rows, pcaInputData.cols);
     }
 }
 
 void Controller::addFileToRecentlyOpen(QString fileName){
     QStringList recentlyOpen = Settings::getInstance().lastImportedFiles();
-    bool editedList = false;
-    if(!recentlyOpen.contains(fileName)){
-        recentlyOpen.prepend(fileName);
-        editedList = true;
+    if(recentlyOpen.contains(fileName)){
+        recentlyOpen.removeAll(fileName);
     }
-    while(true){
-        if(recentlyOpen.size() > RECENTLY_OPEN_MAX){
-            recentlyOpen.takeLast();
-            editedList = true;
-        }else{
-            break;
-        }
+    recentlyOpen.prepend(fileName);
+    while(recentlyOpen.size() > RECENTLY_OPEN_MAX){
+        recentlyOpen.takeLast();
     }
-    if(editedList){
-        emit recentlyImportedFilesChanged(recentlyOpen);
-        Settings::getInstance().setLastImportedFiles(recentlyOpen);
-    }
+    emit recentlyImportedFilesChanged(recentlyOpen);
+    Settings::getInstance().setLastImportedFiles(recentlyOpen);
 }
 
-void Controller::saveMat(char* filename, cv::Mat mat){
+void Controller::saveMat(const char* filename, cv::Mat mat){
     std::fstream out;
 
     out.open(filename, std::fstream::out);
