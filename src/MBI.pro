@@ -36,7 +36,8 @@ SOURCES += main.cpp \
     controller.cpp \
     mainwindow.cpp \
     settings.cpp \
-    micromatrixpca.cpp
+    micromatrixpca.cpp \
+    parameters.cpp
 
 HEADERS += \
     dataimport.h \
@@ -44,10 +45,12 @@ HEADERS += \
     controller.h \
     mainwindow.h \
     settings.h \
-    micromatrixpca.h
+    micromatrixpca.h \
+    parameters.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    parameters.ui
 
 unix {
     CONFIG += link_pkgconfig
