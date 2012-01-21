@@ -1,4 +1,5 @@
 #include "dataimport.h"
+#include "badfile.h"
 
 #include <QStringList>
 #include <QDebug>
@@ -20,6 +21,7 @@ Mat DataImport::parseData(QIODevice& device){
     int currentLine = -1;
     int currentRow = 0;
     int lineCount = 0;
+    int columnsInFirstRow = -1;
     if (!device.open(QIODevice::ReadOnly)){
         std::cout << "Cannot open" << std::endl;
         return Mat();
@@ -56,7 +58,12 @@ Mat DataImport::parseData(QIODevice& device){
                 if(output.rows == 0){
                     //create output matrix
                     int rowCount = lineCount - startAtLine;
+                    columnsInFirstRow = columnValues.size();
                     output = Mat(rowCount, columnValues.size(), CV_32F);
+                }else{
+                    if(columnsInFirstRow != columnValues.size()){
+                        throw BadFile(QString("Bad column count in line"), currentLine);
+                    }
                 }
                 currentCol = 0;
                 for(int x=this->firstColumn ; x <= lastColumn ; x++){

@@ -37,7 +37,8 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     settings.cpp \
     micromatrixpca.cpp \
-    parameters.cpp
+    parameters.cpp \
+    badfile.cpp
 
 HEADERS += \
     dataimport.h \
@@ -46,7 +47,8 @@ HEADERS += \
     mainwindow.h \
     settings.h \
     micromatrixpca.h \
-    parameters.h
+    parameters.h \
+    badfile.h
 
 FORMS += \
     mainwindow.ui \
