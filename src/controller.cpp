@@ -16,13 +16,20 @@ void Controller::init(){
 }
 
 void Controller::openFile(QStringList filenames){
-    DataImport di;
-    QLinkedList<QSharedPointer<MicroMatrix> > results;
+    DataImport di(filenames.size());
+    bool success;
+    QString errorIn;
     foreach(QString filename, filenames){
         qDebug() << "Read file: " << filename.toLocal8Bit().constData();
         QFile file(filename);
-        QSharedPointer<MicroMatrix> matrix = di.parseData(file);
-        results << matrix;
+        bool success = di.parseData(file);
+        if(!success){
+            errorIn = filename;
+            qDebug() << "Error in: " << errorIn;
+            break;
+        }
     }
-    qDebug() << "Import status: " << QString::number(results.size()).toLocal8Bit().constData();
+    Mat pcaInputData = di.fetch();
+    qDebug() << "Import status: " << success;
+
 }
