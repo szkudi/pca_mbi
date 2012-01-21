@@ -4,6 +4,7 @@
 #include "mainwindow.h"
 #include "dataimport.h"
 #include "parameters.h"
+#include "pcaresultwindow.h"
 #include "micromatrixpca.h"
 
 #include <fstream>
@@ -45,6 +46,12 @@ void Controller::openFile(QStringList filenames){
             saveMat("pca.txt", pca_pro);
             Mat pca_backpro = pca.backProjectAll(10);
             saveMat("pca_back.txt", pca_backpro);
+            QMap<int, float> map;
+            map[1] = 0.01;
+            map[3] = 0.02;
+            map[4] = 0.03;
+            PCAResultWindow *errorWindow = new PCAResultWindow(NULL, map);
+            errorWindow->show();
         }
     }
 }

@@ -12,7 +12,12 @@ public:
 
     QString lastDir();
     void setLastDir(QString dir);
-
+    int startingRow();
+    void setStartingRow(int val);
+    int startingColumn();
+    void setStartingColumn(int val);
+    int endingColumn();
+    void setEndingColumn(int val);
 private:
     explicit Settings(QObject *parent = 0);
 

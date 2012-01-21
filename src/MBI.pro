@@ -38,7 +38,8 @@ SOURCES += main.cpp \
     settings.cpp \
     micromatrixpca.cpp \
     parameters.cpp \
-    badfile.cpp
+    badfile.cpp \
+    pcaresultwindow.cpp
 
 HEADERS += \
     dataimport.h \
@@ -48,11 +49,13 @@ HEADERS += \
     settings.h \
     micromatrixpca.h \
     parameters.h \
-    badfile.h
+    badfile.h \
+    pcaresultwindow.h
 
 FORMS += \
     mainwindow.ui \
-    parameters.ui
+    parameters.ui \
+    pcaresultwindow.ui
 
 unix {
     CONFIG += link_pkgconfig
