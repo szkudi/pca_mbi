@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QWidget>
 #include "mainwindow.h"
+#include "cv.h"
 
 class Controller : public QObject
 {
@@ -18,6 +19,7 @@ public slots:
 
 private slots:
     void openFile(QStringList filename);
+    void saveMat(char* filename, cv::Mat mat);
 private:
     MainWindow *view;
 };

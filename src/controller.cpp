@@ -6,6 +6,9 @@
 #include "parameters.h"
 #include "micromatrixpca.h"
 
+#include <fstream>
+#include <iostream>
+
 Controller::Controller(MainWindow *parent) :
     QObject(parent)
 {
@@ -38,8 +41,26 @@ void Controller::openFile(QStringList filenames){
             }        
             qDebug() << "Import status: " << success;
             MicroMatrixPCA pca(pcaInputData);
-            pca.projectAll();
-            pca.backProjectAll(10);
+            Mat pca_pro = pca.projectAll();
+            saveMat("pca.txt", pca_pro);
+            Mat pca_backpro = pca.backProjectAll(10);
+            saveMat("pca_back.txt", pca_backpro);
         }
     }
+}
+
+
+void Controller::saveMat(char* filename, cv::Mat mat){
+    std::fstream out;
+
+    out.open(filename, std::fstream::out);
+
+    for(int i = 0; i < mat.rows; ++i){
+        for(int j = 0; j < mat.cols; ++j){
+            out <<  mat.at<float>(i, j) << "\t";
+        }
+        out << std::endl;
+    }
+
+    out.close();
 }
