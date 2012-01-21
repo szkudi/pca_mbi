@@ -10,10 +10,12 @@ class MicroMatrixPCA
 private:
     PCA pca;
     Mat& originalData;
+    Mat* projectedData;
 
 public:
     MicroMatrixPCA(Mat& mat);
     Mat projectAll();
+    Mat backProjectAll(int columns);
 };
 
 #endif // MICROMATRIXPCA_H
